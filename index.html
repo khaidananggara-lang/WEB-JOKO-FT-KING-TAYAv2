@@ -12,6 +12,7 @@
             --primary: #ff4757;
             --secondary: #2f3542;
             --accent: #2ed573;
+            --instant-buy: #25d366;
             --text-dark: #2f3542;
             --text-muted: #747d8c;
             --border-color: #e4e7eb;
@@ -79,12 +80,13 @@
         .cart-badge {
             position: relative;
             cursor: pointer;
+            font-weight: 600;
         }
         
         .badge {
             position: absolute;
             top: -8px;
-            right: -10px;
+            right: -15px;
             background: var(--primary);
             color: white;
             font-size: 10px;
@@ -93,40 +95,103 @@
             padding: 2px 6px;
         }
 
-        /* HERO BANNER */
-        .hero {
-            background: linear-gradient(135deg, #1e2229 0%, #2f3542 100%);
-            color: white;
-            padding: 40px 5%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
+        /* CAROUSEL BANNER SYSTEM */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            background-color: #1e2229;
             border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
-        .hero-text h1 {
-            font-size: 32px;
+        .carousel-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 10%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .slide-1 { background: linear-gradient(135deg, #1e2229 0%, #2f3542 100%); }
+        .slide-2 { background: linear-gradient(135deg, #4b6584 0%, #1e272e 100%); }
+        .slide-3 { background: linear-gradient(135deg, #b33939 0%, #218c74 100%); }
+
+        .slide-content h1 {
+            font-size: 30px;
             font-weight: 800;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
             color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.4);
         }
-        .hero-text p {
-            color: #a4b0be;
-            font-size: 15px;
+
+        .slide-content p {
+            color: #cbd2d9;
+            font-size: 14px;
             font-style: italic;
-            margin-bottom: 15px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.4);
         }
-        .slogan {
-            background: rgba(255, 71, 87, 0.2);
-            border-left: 4px solid var(--primary);
-            padding: 8px 15px;
-            font-weight: 600;
-            font-size: 13px;
-            display: inline-block;
-            border-radius: 0 6px 6px 0;
+
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .carousel-arrow:hover { background: var(--primary); }
+        .arrow-left { left: 15px; }
+        .arrow-right { right: 15px; }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.2);
         }
 
         /* MAIN STORE LAYOUT */
@@ -211,7 +276,6 @@
             z-index: 10;
         }
 
-        /* BLACK BACKGROUND PLACEHOLDER */
         .product-img-placeholder {
             background: #000000;
             height: 150px;
@@ -301,27 +365,42 @@
             color: var(--primary);
         }
 
-        .buy-btn {
+        .btn-group {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
             gap: 8px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 13px;
-            transition: background 0.2s;
-            text-align: center;
-            cursor: pointer;
             width: 100%;
         }
 
-        .buy-btn:hover {
-            background: #26af5f;
+        .cart-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+            text-align: center;
         }
+        .cart-btn:hover { background: #26af5f; }
+
+        .instant-btn {
+            background: var(--instant-buy);
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+            text-align: center;
+        }
+        .instant-btn:hover { background: #20ba59; }
 
         /* SHOPPING CART MODAL STYLING */
         .cart-modal-overlay {
@@ -503,11 +582,12 @@
             font-size: 12px;
         }
 
-        /* RESPONSIVE DESIGN */
         @media (max-width: 768px) {
             .main-container { grid-template-columns: 1fr; }
             .sidebar, .search-bar { display: none; }
-            .hero { flex-direction: column; text-align: center; padding: 30px 20px; }
+            .carousel-container { height: 200px; }
+            .slide-content h1 { font-size: 22px; }
+            .slide-content p { font-size: 12px; }
         }
     </style>
 </head>
@@ -527,19 +607,35 @@
         </div>
     </nav>
 
-    <!-- HERO BANNER -->
-    <div class="hero">
-        <div class="hero-text">
-            <h1>JOKO FT KING TAYA</h1>
-            <p>buka sesuai mood</p>
-            <div class="slogan">LU ADA TAYA LU PUNYA KUASA</div>
+    <!-- AUTOMATIC CAROUSEL BANNER SLIDER -->
+    <div class="carousel-container">
+        <div class="carousel-track" id="carouselTrack">
+            <div class="carousel-slide slide-1">
+                <div class="slide-content">
+                    <h1>JOKO FT KING TAYA</h1>
+                    <p>LU ADA TAYA LU PUNYA KUASA • Buka sesuai mood king</p>
+                </div>
+            </div>
+            <div class="carousel-slide slide-2">
+                <div class="slide-content">
+                    <h1>DISKON GEMILANG 50%</h1>
+                    <p>Semua harga paket JOKO pangkas setengah harga, borong sekarang!</p>
+                </div>
+            </div>
+            <div class="carousel-slide slide-3">
+                <div class="slide-content">
+                    <h1>PROSES KILAT ANTI DELAY</h1>
+                    <p>Layanan kilat, admin responsif, jaminan mendarat aman aman saja.</p>
+                </div>
+            </div>
         </div>
+        <button class="carousel-arrow arrow-left" onclick="moveSlide(-1)">&#10094;</button>
+        <button class="carousel-arrow arrow-right" onclick="moveSlide(1)">&#10095;</button>
+        <div class="carousel-dots" id="carouselDots"></div>
     </div>
 
     <!-- MAIN APP WRAPPER -->
     <div class="main-container">
-        
-        <!-- SIDEBAR -->
         <div class="sidebar">
             <h4>Kategori Game</h4>
             <div class="filter-group">
@@ -550,180 +646,89 @@
             </div>
         </div>
 
-        <!-- PRODUCTS GRID -->
         <div class="products-container">
             <div class="products-grid">
-                
                 <!-- Paket 1 -->
                 <div class="product-card">
                     <div class="discount-badge">-50%</div>
-                    <div class="product-img-placeholder">
-                        500P
-                        <div class="tag-status">Terlaris</div>
-                    </div>
+                    <div class="product-img-placeholder">500P<div class="tag-status">Terlaris</div></div>
                     <div class="product-info">
                         <span class="category-tag">JASA JOKO FT</span>
                         <h3 class="product-title">Paket JOKO FT #1 (Fee 500P)</h3>
                         <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(1.2k+ terjual)</span></div>
                         <div class="price-wrapper"><span class="old-price">1K</span><span class="current-price">500P</span></div>
-                        <button class="buy-btn" onclick="addToCart(1, 'Paket JOKO FT #1 (Fee 500P)', 500, 'P')">Tambah Keranjang</button>
+                        <div class="btn-group">
+                            <button class="cart-btn" onclick="addToCart(1, 'Paket JOKO FT #1', 500, 'P')">Tambah Keranjang</button>
+                            <button class="instant-btn" onclick="instantBuy('Paket JOKO FT #1', 500)">Beli Sekarang</button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Paket 2 -->
                 <div class="product-card">
                     <div class="discount-badge">-50%</div>
-                    <div class="product-img-placeholder">
-                        750P
-                    </div>
+                    <div class="product-img-placeholder">750P</div>
                     <div class="product-info">
                         <span class="category-tag">JASA JOKO FT</span>
                         <h3 class="product-title">Paket JOKO FT #2 (Fee 750P)</h3>
                         <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(940 terjual)</span></div>
                         <div class="price-wrapper"><span class="old-price">1.5K</span><span class="current-price">750P</span></div>
-                        <button class="buy-btn" onclick="addToCart(2, 'Paket JOKO FT #2 (Fee 750P)', 750, 'P')">Tambah Keranjang</button>
+                        <div class="btn-group">
+                            <button class="cart-btn" onclick="addToCart(2, 'Paket JOKO FT #2', 750, 'P')">Tambah Keranjang</button>
+                            <button class="instant-btn" onclick="instantBuy('Paket JOKO FT #2', 750)">Beli Sekarang</button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Paket 3 -->
                 <div class="product-card">
                     <div class="discount-badge">-50%</div>
-                    <div class="product-img-placeholder">
-                        1K
-                        <div class="tag-status">Terlaris</div>
-                    </div>
+                    <div class="product-img-placeholder">1K<div class="tag-status">Terlaris</div></div>
                     <div class="product-info">
                         <span class="category-tag">JASA JOKO FT</span>
                         <h3 class="product-title">Paket JOKO FT #3 (Fee 1K)</h3>
                         <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(2.1k+ terjual)</span></div>
                         <div class="price-wrapper"><span class="old-price">2K</span><span class="current-price">1K</span></div>
-                        <button class="buy-btn" onclick="addToCart(3, 'Paket JOKO FT #3 (Fee 1K)', 1000, 'K')">Tambah Keranjang</button>
+                        <div class="btn-group">
+                            <button class="cart-btn" onclick="addToCart(3, 'Paket JOKO FT #3', 1000, 'K')">Tambah Keranjang</button>
+                            <button class="instant-btn" onclick="instantBuy('Paket JOKO FT #3', 1000)">Beli Sekarang</button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Paket 4 -->
                 <div class="product-card">
                     <div class="discount-badge">-50%</div>
-                    <div class="product-img-placeholder">
-                        1.5K
-                    </div>
+                    <div class="product-img-placeholder">1.5K</div>
                     <div class="product-info">
                         <span class="category-tag">JASA JOKO FT</span>
                         <h3 class="product-title">Paket JOKO FT #4 (Fee 1.5K)</h3>
                         <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(1.4k+ terjual)</span></div>
                         <div class="price-wrapper"><span class="old-price">3K</span><span class="current-price">1.5K</span></div>
-                        <button class="buy-btn" onclick="addToCart(4, 'Paket JOKO FT #4 (Fee 1.5K)', 1500, 'K')">Tambah Keranjang</button>
+                        <div class="btn-group">
+                            <button class="cart-btn" onclick="addToCart(4, 'Paket JOKO FT #4', 1500, 'K')">Tambah Keranjang</button>
+                            <button class="instant-btn" onclick="instantBuy('Paket JOKO FT #4', 1500)">Beli Sekarang</button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Paket 5 -->
                 <div class="product-card">
                     <div class="discount-badge">-50%</div>
-                    <div class="product-img-placeholder">
-                        2K
-                    </div>
+                    <div class="product-img-placeholder">2K</div>
                     <div class="product-info">
                         <span class="category-tag">JASA JOKO FT</span>
                         <h3 class="product-title">Paket JOKO FT #5 (Fee 2K)</h3>
                         <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(820 terjual)</span></div>
                         <div class="price-wrapper"><span class="old-price">4K</span><span class="current-price">2K</span></div>
-                        <button class="buy-btn" onclick="addToCart(5, 'Paket JOKO FT #5 (Fee 2K)', 2000, 'K')">Tambah Keranjang</button>
+                        <div class="btn-group">
+                            <button class="cart-btn" onclick="addToCart(5, 'Paket JOKO FT #5', 2000, 'K')">Tambah Keranjang</button>
+                            <button class="instant-btn" onclick="instantBuy('Paket JOKO FT #5', 2000)">Beli Sekarang</button>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Paket 6 -->
-                <div class="product-card">
-                    <div class="discount-badge">-50%</div>
-                    <div class="product-img-placeholder">
-                        2.5K
-                    </div>
-                    <div class="product-info">
-                        <span class="category-tag">JASA JOKO FT</span>
-                        <h3 class="product-title">Paket JOKO FT #6 (Fee 2.5K)</h3>
-                        <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(660 terjual)</span></div>
-                        <div class="price-wrapper"><span class="old-price">5K</span><span class="current-price">2.5K</span></div>
-                        <button class="buy-btn" onclick="addToCart(6, 'Paket JOKO FT #6 (Fee 2.5K)', 2500, 'K')">Tambah Keranjang</button>
-                    </div>
-                </div>
-
-                <!-- Paket 7 -->
-                <div class="product-card">
-                    <div class="discount-badge">-50%</div>
-                    <div class="product-img-placeholder">
-                        3K
-                    </div>
-                    <div class="product-info">
-                        <span class="category-tag">JASA JOKO FT</span>
-                        <h3 class="product-title">Paket JOKO FT #7 (Fee 3K)</h3>
-                        <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(1.1k+ terjual)</span></div>
-                        <div class="price-wrapper"><span class="old-price">6K</span><span class="current-price">3K</span></div>
-                        <button class="buy-btn" onclick="addToCart(7, 'Paket JOKO FT #7 (Fee 3K)', 3000, 'K')">Tambah Keranjang</button>
-                    </div>
-                </div>
-
-                <!-- Paket 8 -->
-                <div class="product-card">
-                    <div class="discount-badge">-50%</div>
-                    <div class="product-img-placeholder">
-                        3.5K
-                    </div>
-                    <div class="product-info">
-                        <span class="category-tag">JASA JOKO FT</span>
-                        <h3 class="product-title">Paket JOKO FT #8 (Fee 3.5K)</h3>
-                        <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(430 terjual)</span></div>
-                        <div class="price-wrapper"><span class="old-price">7K</span><span class="current-price">3.5K</span></div>
-                        <button class="buy-btn" onclick="addToCart(8, 'Paket JOKO FT #8 (Fee 3.5K)', 3500, 'K')">Tambah Keranjang</button>
-                    </div>
-                </div>
-
-                <!-- Paket 9 -->
-                <div class="product-card">
-                    <div class="discount-badge">-50%</div>
-                    <div class="product-img-placeholder">
-                        4K
-                    </div>
-                    <div class="product-info">
-                        <span class="category-tag">JASA JOKO FT</span>
-                        <h3 class="product-title">Paket JOKO FT #9 (Fee 4K)</h3>
-                        <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(510 terjual)</span></div>
-                        <div class="price-wrapper"><span class="old-price">8K</span><span class="current-price">4K</span></div>
-                        <button class="buy-btn" onclick="addToCart(9, 'Paket JOKO FT #9 (Fee 4K)', 4000, 'K')">Tambah Keranjang</button>
-                    </div>
-                </div>
-
-                <!-- Paket 10 -->
-                <div class="product-card">
-                    <div class="discount-badge">-50%</div>
-                    <div class="product-img-placeholder">
-                        4.5K
-                    </div>
-                    <div class="product-info">
-                        <span class="category-tag">JASA JOKO FT</span>
-                        <h3 class="product-title">Paket JOKO FT #10 (Fee 4.5K)</h3>
-                        <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(290 terjual)</span></div>
-                        <div class="price-wrapper"><span class="old-price">9K</span><span class="current-price">4.5K</span></div>
-                        <button class="buy-btn" onclick="addToCart(10, 'Paket JOKO FT #10 (Fee 4.5K)', 4500, 'K')">Tambah Keranjang</button>
-                    </div>
-                </div>
-
-                <!-- Paket 11 -->
-                <div class="product-card">
-                    <div class="discount-badge">-50%</div>
-                    <div class="product-img-placeholder">
-                        5K
-                    </div>
-                    <div class="product-info">
-                        <span class="category-tag">JASA JOKO FT</span>
-                        <h3 class="product-title">Paket JOKO FT #11 (Fee 5K)</h3>
-                        <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(1.2k+ terjual)</span></div>
-                        <div class="price-wrapper"><span class="old-price">10K</span><span class="current-price">5K</span></div>
-                        <button class="buy-btn" onclick="addToCart(11, 'Paket JOKO FT #11 (Fee 5K)', 5000, 'K')">Tambah Keranjang</button>
-                    </div>
-                </div>
-
             </div>
         </div>
-
     </div>
 
     <!-- MODAL POPUP KERANJANG -->
@@ -733,17 +738,13 @@
                 <h3>Keranjang Belanja</h3>
                 <button class="close-cart-btn" onclick="toggleCartModal(false)">&times;</button>
             </div>
-            <div class="cart-items-list" id="cartItemsList">
-                <!-- Data diisi via JS -->
-            </div>
+            <div class="cart-items-list" id="cartItemsList"></div>
             <div class="cart-footer">
                 <div class="cart-total-wrapper">
                     <span>Total Tagihan:</span>
                     <span class="cart-total-price" id="cartTotalPrice">0P</span>
                 </div>
-                <button class="checkout-btn" onclick="checkoutWhatsApp()">
-                    Checkout via WhatsApp
-                </button>
+                <button class="checkout-btn" onclick="checkoutWhatsApp()">Checkout via WhatsApp</button>
             </div>
         </div>
     </div>
@@ -761,13 +762,59 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
     <footer>
         &copy; 2026 KING TAYA STORE. All Rights Reserved. Desain E-Commerce Profesional Otomatis.
     </footer>
 
-    <!-- JAVASCRIPT SYSTEM ENGINE (CLEAN CODE) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <script>
+        // ==========================================
+        // ENGINE CAROUSEL (SLIDER) AUTOMATIC
+        // ==========================================
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const track = document.getElementById('carouselTrack');
+        const dotsContainer = document.getElementById('carouselDots');
+
+        slides.forEach((_, idx) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (idx === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => jumpToSlide(idx));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function updateSliderPosition() {
+            track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlideIndex);
+            });
+        }
+
+        function moveSlide(direction) {
+            currentSlideIndex += direction;
+            if (currentSlideIndex >= slides.length) {
+                currentSlideIndex = 0;
+            } else if (currentSlideIndex < 0) {
+                currentSlideIndex = slides.length - 1;
+            }
+            updateSliderPosition();
+        }
+
+        function jumpToSlide(index) {
+            currentSlideIndex = index;
+            updateSliderPosition();
+        }
+
+        setInterval(() => { moveSlide(1); }, 5000);
+
+        // ==========================================
+        // ENGINE CORE KERANJANG & WHATSAPP (UPDATED)
+        // ==========================================
         let cart = JSON.parse(localStorage.getItem('kingtaya_cart')) || [];
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -789,43 +836,32 @@
         }
 
         function closeCartOutside(e) {
-            if (e.target.id === 'cartModalOverlay') {
-                toggleCartModal(false);
-            }
+            if (e.target.id === 'cartModalOverlay') toggleCartModal(false);
         }
 
         function formatDisplayPrice(value) {
             if (value >= 1000) {
-                let formatted = value / 1000;
-                return formatted + 'K';
+                return (value / 1000) + 'K';
             }
             return value + 'P';
         }
 
         function addToCart(id, name, price, unitType) {
             const existingItem = cart.find(item => item.id === id);
-
             if (existingItem) {
                 existingItem.qty += 1;
             } else {
-                cart.push({
-                    id: id,
-                    name: name,
-                    price: price,
-                    qty: 1,
-                    unit: unitType
-                });
+                cart.push({ id: id, name: name, price: price, qty: 1, unit: unitType });
             }
             saveCartToLocalStorage();
             updateCartBadge();
-            alert(name + ' berhasil dimasukkan ke keranjang belanja!');
+            alert(name + ' berhasil dimasukkan ke keranjang!');
         }
 
         function updateCartBadge() {
             const badge = document.getElementById('cart-counter');
             if(badge) {
-                const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-                badge.innerText = totalQty;
+                badge.innerText = cart.reduce((sum, item) => sum + item.qty, 0);
             }
         }
 
@@ -833,9 +869,7 @@
             const item = cart.find(item => item.id === id);
             if (item) {
                 item.qty += delta;
-                if (item.qty <= 0) {
-                    cart = cart.filter(i => i.id !== id);
-                }
+                if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
             }
             saveCartToLocalStorage();
             renderCart();
@@ -845,7 +879,6 @@
         function renderCart() {
             const listContainer = document.getElementById('cartItemsList');
             const totalPriceContainer = document.getElementById('cartTotalPrice');
-            
             listContainer.innerHTML = '';
             
             if (cart.length === 0) {
@@ -855,11 +888,8 @@
             }
 
             let totalBill = 0;
-
             cart.forEach(item => {
-                const itemTotalCost = item.price * item.qty;
-                totalBill += itemTotalCost;
-
+                totalBill += (item.price * item.qty);
                 const itemElement = document.createElement('div');
                 itemElement.classList.add('cart-item');
                 itemElement.innerHTML = `
@@ -875,30 +905,42 @@
                 `;
                 listContainer.appendChild(itemElement);
             });
-
             totalPriceContainer.innerText = formatDisplayPrice(totalBill);
         }
 
+        // FUNGSI VALIDASI PILIHAN LAYANAN (11, 22, 33, 44)
+        function dapatkanPilihanMain() {
+            let pilihan = prompt("PILIH LAYANAN MAIN LU, CO!\nKetik salah satu angka ini: 11, 22, 33, atau 44");
+            
+            if (pilihan === null) return null; // Jika klik batal
+            
+            pilihan = pilihan.trim();
+            if (['11', '22', '33', '44'].includes(pilihan)) {
+                return pilihan;
+            } else {
+                alert("Woi! Masukin opsi yang bener king, cuma bisa pilih 11, 22, 33, atau 44!");
+                return dapatkanPilihanMain(); // Ulang fungsi kalau salah ketik
+            }
+        }
+
+        // CHECKOUT MULTI-ITEM VIA KERANJANG
         function checkoutWhatsApp() {
             if (cart.length === 0) {
-                alert('Keranjang lu kosong king, isi dulu lah baru checkout!');
+                alert('Keranjang lu kosong king, isi dulu lah!');
                 return;
             }
 
-            let waNumber = "6285954684314";
-            let message = "Halo King, gw mau pesen layanan JOKO FT di website lu. Ini list keranjang belanjaan gw:\n\n";
-            
-            let totalBill = 0;
-            cart.forEach((item, index) => {
-                const subTotal = item.price * item.qty;
-                totalBill += subTotal;
-                message += (index + 1) + ". *" + item.name + "*\n   Jumlah: " + item.qty + "x \n   Subtotal: " + formatDisplayPrice(subTotal) + "\n\n";
-            });
+            let opsiMain = dapatkanPilihanMain();
+            if (opsiMain === null) return; // Stop proses kalau klik cancel
 
-            message += "=========================\n";
-            message += "TOTAL TAGIHAN: " + formatDisplayPrice(totalBill) + "\n";
-            message += "=========================\n\n";
-            message += "Mohon segera direspon ya king, ditunggu proses kilatnya!";
+            let waNumber = "6285954684314";
+            let totalBill = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            
+            // Susun gabungan harga catalog item yang ada di keranjang
+            let listKatalogHarga = cart.map(item => `${formatDisplayPrice(item.price)} (${item.qty}x)`).join(" + ");
+
+            // FORMAT DENGAN CAPS LOCK KEJAM SESUAI REQUEST
+            let message = `WOI KING, gw mau joko ft fee nya ${listKatalogHarga} (Total: ${formatDisplayPrice(totalBill)}), Main nya ${opsiMain}, dibales ya KING`;
 
             let encodedMessage = encodeURIComponent(message);
             let waUrl = "https://wa.me/" + waNumber + "?text=" + encodedMessage;
@@ -907,10 +949,25 @@
             saveCartToLocalStorage();
             updateCartBadge();
             toggleCartModal(false);
+            window.open(waUrl, '_blank');
+        }
 
+        // TOMBOL BELI INSTAN SATU ITEM (LANGSUNG GAS)
+        function instantBuy(name, price) {
+            let opsiMain = dapatkanPilihanMain();
+            if (opsiMain === null) return; // Stop proses kalau klik cancel
+
+            let waNumber = "6285954684314";
+            let feeDisplay = formatDisplayPrice(price);
+            
+            // FORMAT DENGAN CAPS LOCK KEJAM SESUAI REQUEST
+            let message = `WOI KING, gw mau joko ft fee nya ${feeDisplay}, Main nya ${opsiMain}, dibales ya KING`;
+
+            let encodedMessage = encodeURIComponent(message);
+            let waUrl = "https://wa.me/" + waNumber + "?text=" + encodedMessage;
+            
             window.open(waUrl, '_blank');
         }
     </script>
-
 </body>
 </html>
