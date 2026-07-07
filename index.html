@@ -544,6 +544,113 @@
         }
         .checkout-btn:hover { background: #20ba59; }
 
+        /* ==========================================
+           NEW WEB UI OPTION SELECTION MODAL STYLING
+           ========================================== */
+        .option-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .option-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .option-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: modalScale 0.3s ease;
+        }
+
+        @keyframes modalScale {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .option-header {
+            background: var(--secondary);
+            color: #fff;
+            padding: 20px;
+        }
+
+        .option-header h3 {
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .option-header p {
+            font-size: 12px;
+            color: #cbd2d9;
+            margin-top: 5px;
+        }
+
+        .option-body {
+            padding: 25px 20px;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .opt-btn {
+            background: #f1f2f6;
+            border: 2px solid #e4e7eb;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .opt-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .back-btn {
+            background: #747d8c;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #57606f;
+        }
+
         /* PAYMENT GATEWAY SECTION */
         .payments-section {
             background: var(--bg-card);
@@ -607,7 +714,7 @@
         </div>
     </nav>
 
-    <!-- AUTOMATIC CAROUSEL BANNER SLIDER -->
+    <!-- CAROUSEL BANNER SLIDER -->
     <div class="carousel-container">
         <div class="carousel-track" id="carouselTrack">
             <div class="carousel-slide slide-1">
@@ -659,7 +766,7 @@
                         <div class="price-wrapper"><span class="old-price">1K</span><span class="current-price">500P</span></div>
                         <div class="btn-group">
                             <button class="cart-btn" onclick="addToCart(1, 'Paket JOKO FT #1', 500, 'P')">Tambah Keranjang</button>
-                            <button class="instant-btn" onclick="instantBuy('Paket JOKO FT #1', 500)">Beli Sekarang</button>
+                            <button class="instant-btn" onclick="openOptionUI('instant', 'Paket JOKO FT #1', 500)">Beli Sekarang</button>
                         </div>
                     </div>
                 </div>
@@ -675,7 +782,7 @@
                         <div class="price-wrapper"><span class="old-price">1.5K</span><span class="current-price">750P</span></div>
                         <div class="btn-group">
                             <button class="cart-btn" onclick="addToCart(2, 'Paket JOKO FT #2', 750, 'P')">Tambah Keranjang</button>
-                            <button class="instant-btn" onclick="instantBuy('Paket JOKO FT #2', 750)">Beli Sekarang</button>
+                            <button class="instant-btn" onclick="openOptionUI('instant', 'Paket JOKO FT #2', 750)">Beli Sekarang</button>
                         </div>
                     </div>
                 </div>
@@ -691,7 +798,7 @@
                         <div class="price-wrapper"><span class="old-price">2K</span><span class="current-price">1K</span></div>
                         <div class="btn-group">
                             <button class="cart-btn" onclick="addToCart(3, 'Paket JOKO FT #3', 1000, 'K')">Tambah Keranjang</button>
-                            <button class="instant-btn" onclick="instantBuy('Paket JOKO FT #3', 1000)">Beli Sekarang</button>
+                            <button class="instant-btn" onclick="openOptionUI('instant', 'Paket JOKO FT #3', 1000)">Beli Sekarang</button>
                         </div>
                     </div>
                 </div>
@@ -707,7 +814,7 @@
                         <div class="price-wrapper"><span class="old-price">3K</span><span class="current-price">1.5K</span></div>
                         <div class="btn-group">
                             <button class="cart-btn" onclick="addToCart(4, 'Paket JOKO FT #4', 1500, 'K')">Tambah Keranjang</button>
-                            <button class="instant-btn" onclick="instantBuy('Paket JOKO FT #4', 1500)">Beli Sekarang</button>
+                            <button class="instant-btn" onclick="openOptionUI('instant', 'Paket JOKO FT #4', 1500)">Beli Sekarang</button>
                         </div>
                     </div>
                 </div>
@@ -723,10 +830,107 @@
                         <div class="price-wrapper"><span class="old-price">4K</span><span class="current-price">2K</span></div>
                         <div class="btn-group">
                             <button class="cart-btn" onclick="addToCart(5, 'Paket JOKO FT #5', 2000, 'K')">Tambah Keranjang</button>
-                            <button class="instant-btn" onclick="instantBuy('Paket JOKO FT #5', 2000)">Beli Sekarang</button>
+                            <button class="instant-btn" onclick="openOptionUI('instant', 'Paket JOKO FT #5', 2000)">Beli Sekarang</button>
                         </div>
                     </div>
                 </div>
+
+                <!-- Paket 6 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">2.5K</div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #6 (Fee 2.5K)</h3>
+                        <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(610 terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">5K</span><span class="current-price">2.5K</span></div>
+                        <div class="btn-group">
+                            <button class="cart-btn" onclick="addToCart(6, 'Paket JOKO FT #6', 2500, 'K')">Tambah Keranjang</button>
+                            <button class="instant-btn" onclick="openOptionUI('instant', 'Paket JOKO FT #6', 2500)">Beli Sekarang</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paket 7 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">3K</div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #7 (Fee 3K)</h3>
+                        <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(540 terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">6K</span><span class="current-price">3K</span></div>
+                        <div class="btn-group">
+                            <button class="cart-btn" onclick="addToCart(7, 'Paket JOKO FT #7', 3000, 'K')">Tambah Keranjang</button>
+                            <button class="instant-btn" onclick="openOptionUI('instant', 'Paket JOKO FT #7', 3000)">Beli Sekarang</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paket 8 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">3.5K</div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #8 (Fee 3.5K)</h3>
+                        <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(430 terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">7K</span><span class="current-price">3.5K</span></div>
+                        <div class="btn-group">
+                            <button class="cart-btn" onclick="addToCart(8, 'Paket JOKO FT #8', 3500, 'K')">Tambah Keranjang</button>
+                            <button class="instant-btn" onclick="openOptionUI('instant', 'Paket JOKO FT #8', 3500)">Beli Sekarang</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paket 9 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">4K</div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #9 (Fee 4K)</h3>
+                        <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(390 terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">8K</span><span class="current-price">4K</span></div>
+                        <div class="btn-group">
+                            <button class="cart-btn" onclick="addToCart(9, 'Paket JOKO FT #9', 4000, 'K')">Tambah Keranjang</button>
+                            <button class="instant-btn" onclick="openOptionUI('instant', 'Paket JOKO FT #9', 4000)">Beli Sekarang</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paket 10 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">4.5K</div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #10 (Fee 4.5K)</h3>
+                        <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(210 terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">9K</span><span class="current-price">4.5K</span></div>
+                        <div class="btn-group">
+                            <button class="cart-btn" onclick="addToCart(1, 'Paket JOKO FT #10', 4500, 'K')">Tambah Keranjang</button>
+                            <button class="instant-btn" onclick="openOptionUI('instant', 'Paket JOKO FT #10', 4500)">Beli Sekarang</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paket 11 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">5K<div class="tag-status">Sultan</div></div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #11 (Fee 5K)</h3>
+                        <div class="rating"><span class="stars">★★★★★</span><span class="sold-count">(580 terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">10K</span><span class="current-price">5K</span></div>
+                        <div class="btn-group">
+                            <button class="cart-btn" onclick="addToCart(11, 'Paket JOKO FT #11', 5000, 'K')">Tambah Keranjang</button>
+                            <button class="instant-btn" onclick="openOptionUI('instant', 'Paket JOKO FT #11', 5000)">Beli Sekarang</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -744,7 +948,26 @@
                     <span>Total Tagihan:</span>
                     <span class="cart-total-price" id="cartTotalPrice">0P</span>
                 </div>
-                <button class="checkout-btn" onclick="checkoutWhatsApp()">Checkout via WhatsApp</button>
+                <button class="checkout-btn" onclick="openOptionUI('cart', '', 0)">Checkout via WhatsApp</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW MODAL CUSTOM WEB UI OPTION MENU (11, 22, 33, 44) -->
+    <div class="option-modal-overlay" id="optionModalOverlay">
+        <div class="option-container">
+            <div class="option-header">
+                <h3>PILIH OPSI MAIN LU, CO!</h3>
+                <p>Silakan klik opsi bermain di bawah ini untuk lanjut order</p>
+            </div>
+            <div class="option-body">
+                <div class="option-grid">
+                    <button class="opt-btn" onclick="executeOrder('11')">11</button>
+                    <button class="opt-btn" onclick="executeOrder('22')">22</button>
+                    <button class="opt-btn" onclick="executeOrder('33')">33</button>
+                    <button class="opt-btn" onclick="executeOrder('44')">44</button>
+                </div>
+                <button class="back-btn" onclick="closeOptionUI()">← KEMBALI (BACK)</button>
             </div>
         </div>
     </div>
@@ -813,9 +1036,13 @@
         setInterval(() => { moveSlide(1); }, 5000);
 
         // ==========================================
-        // ENGINE CORE KERANJANG & WHATSAPP (UPDATED)
+        // ENGINE CORE STORE & NEW WEB UI SELECT SYSTEM
         // ==========================================
         let cart = JSON.parse(localStorage.getItem('kingtaya_cart')) || [];
+        
+        // Data Global State Order Sementara
+        let activeCheckoutType = ''; // 'instant' atau 'cart'
+        let selectedInstantItem = { name: '', price: 0 };
 
         document.addEventListener("DOMContentLoaded", function() {
             updateCartBadge();
@@ -908,64 +1135,61 @@
             totalPriceContainer.innerText = formatDisplayPrice(totalBill);
         }
 
-        // FUNGSI VALIDASI PILIHAN LAYANAN (11, 22, 33, 44)
-        function dapatkanPilihanMain() {
-            let pilihan = prompt("PILIH LAYANAN MAIN LU, CO!\nKetik salah satu angka ini: 11, 22, 33, atau 44");
-            
-            if (pilihan === null) return null; // Jika klik batal
-            
-            pilihan = pilihan.trim();
-            if (['11', '22', '33', '44'].includes(pilihan)) {
-                return pilihan;
-            } else {
-                alert("Woi! Masukin opsi yang bener king, cuma bisa pilih 11, 22, 33, atau 44!");
-                return dapatkanPilihanMain(); // Ulang fungsi kalau salah ketik
-            }
-        }
-
-        // CHECKOUT MULTI-ITEM VIA KERANJANG
-        function checkoutWhatsApp() {
-            if (cart.length === 0) {
+        // FUNGSI BUKA CUSTOM OPTION MODAL UI (11/22/33/44)
+        function openOptionUI(type, name = '', price = 0) {
+            if (type === 'cart' && cart.length === 0) {
                 alert('Keranjang lu kosong king, isi dulu lah!');
                 return;
             }
-
-            let opsiMain = dapatkanPilihanMain();
-            if (opsiMain === null) return; // Stop proses kalau klik cancel
-
-            let waNumber = "6285954684314";
-            let totalBill = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             
-            // Susun gabungan harga catalog item yang ada di keranjang
-            let listKatalogHarga = cart.map(item => `${formatDisplayPrice(item.price)} (${item.qty}x)`).join(" + ");
-
-            // FORMAT DENGAN CAPS LOCK KEJAM SESUAI REQUEST
-            let message = `WOI KING, gw mau joko ft fee nya ${listKatalogHarga} (Total: ${formatDisplayPrice(totalBill)}), Main nya ${opsiMain}, dibales ya KING`;
-
-            let encodedMessage = encodeURIComponent(message);
-            let waUrl = "https://wa.me/" + waNumber + "?text=" + encodedMessage;
-
-            cart = [];
-            saveCartToLocalStorage();
-            updateCartBadge();
-            toggleCartModal(false);
-            window.open(waUrl, '_blank');
+            activeCheckoutType = type;
+            if (type === 'instant') {
+                selectedInstantItem = { name: name, price: price };
+            } else if (type === 'cart') {
+                toggleCartModal(false); // Tutup keranjang biar gak tumpuk UI-nya
+            }
+            
+            document.getElementById('optionModalOverlay').classList.add('active');
         }
 
-        // TOMBOL BELI INSTAN SATU ITEM (LANGSUNG GAS)
-        function instantBuy(name, price) {
-            let opsiMain = dapatkanPilihanMain();
-            if (opsiMain === null) return; // Stop proses kalau klik cancel
-
-            let waNumber = "6285954684314";
-            let feeDisplay = formatDisplayPrice(price);
+        // FUNGSI BACK / TOMBOL KEMBALI
+        function closeOptionUI() {
+            document.getElementById('optionModalOverlay').classList.remove('active');
             
-            // FORMAT DENGAN CAPS LOCK KEJAM SESUAI REQUEST
-            let message = `WOI KING, gw mau joko ft fee nya ${feeDisplay}, Main nya ${opsiMain}, dibales ya KING`;
+            // Kalau pembeli back pas dari keranjang, balikin modal keranjangnya terbuka lagi
+            if (activeCheckoutType === 'cart') {
+                toggleCartModal(true);
+            }
+        }
+
+        // EXECUTE PROSES KIRIM DATA FORMAT PESAN UTUH WA SAAT OPSI DIKLIK
+        function executeOrder(opsiMain) {
+            let waNumber = "6285954684314";
+            let message = "";
+
+            if (activeCheckoutType === 'instant') {
+                let feeDisplay = formatDisplayPrice(selectedInstantItem.price);
+                // FORMAT CAPS LOCK SESUAI REQUEST
+                message = `WOI KING, gw mau joko ft fee nya ${feeDisplay}, Main nya ${opsiMain}, dibales ya KING`;
+            } 
+            else if (activeCheckoutType === 'cart') {
+                let totalBill = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+                let listKatalogHarga = cart.map(item => `${formatDisplayPrice(item.price)} (${item.qty}x)`).join(" + ");
+                
+                // FORMAT CAPS LOCK SESUAI REQUEST MULTI-ITEM
+                message = `WOI KING, gw mau joko ft fee nya ${listKatalogHarga} (Total: ${formatDisplayPrice(totalBill)}), Main nya ${opsiMain}, dibales ya KING`;
+                
+                // Clear keranjang karena order sudah dilempar
+                cart = [];
+                saveCartToLocalStorage();
+                updateCartBadge();
+            }
 
             let encodedMessage = encodeURIComponent(message);
             let waUrl = "https://wa.me/" + waNumber + "?text=" + encodedMessage;
             
+            // Tutup UI Option Modal & gas arahin ke WhatsApp
+            document.getElementById('optionModalOverlay').classList.remove('active');
             window.open(waUrl, '_blank');
         }
     </script>
