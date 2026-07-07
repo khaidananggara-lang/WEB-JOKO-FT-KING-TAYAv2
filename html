@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KING TAYA STORE | E-Commerce Top Up & Jasa Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #f4f6f9;
+            --bg-card: #ffffff;
+            --primary: #ff4757;
+            --secondary: #2f3542;
+            --accent: #2ed573;
+            --text-dark: #2f3542;
+            --text-muted: #747d8c;
+            --border-color: #e4e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        /* NAVBAR STYLING */
+        nav {
+            background-color: var(--secondary);
+            color: #fff;
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .logo span { color: var(--primary); }
+
+        .search-bar {
+            flex: 0.5;
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 6px 12px;
+            align-items: center;
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            color: #fff;
+            width: 100%;
+            margin-left: 10px;
+            outline: none;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .cart-badge {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: var(--primary);
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 50%;
+            padding: 2px 6px;
+        }
+
+        /* HERO BANNER */
+        .hero {
+            background: linear-gradient(135deg, #1e2229 0%, #2f3542 100%);
+            color: white;
+            padding: 40px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .hero-text h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .hero-text p {
+            color: #a4b0be;
+            font-size: 15px;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        .slogan {
+            background: rgba(255, 71, 87, 0.2);
+            border-left: 4px solid var(--primary);
+            padding: 8px 15px;
+            font-weight: 600;
+            font-size: 13px;
+            display: inline-block;
+            border-radius: 0 6px 6px 0;
+        }
+
+        /* MAIN STORE LAYOUT */
+        .main-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 30px;
+        }
+
+        /* SIDEBAR FILTER */
+        .sidebar {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            height: fit-content;
+        }
+
+        .sidebar h4 {
+            font-size: 15px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--bg-main);
+            padding-bottom: 8px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .filter-item.active, .filter-item:hover {
+            color: var(--primary);
+        }
+
+        /* PRODUCT GRID */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            border-color: #cbd2d9;
+        }
+
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            z-index: 10;
+        }
+
+        /* BLACK BACKGROUND & BIG TEXT PHOTO PLACEHOLDER */
+        .product-img-placeholder {
+            background: #000000;
+            height: 150px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+        }
+
+        .tag-status {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            z-index: 5;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .product-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .category-tag {
+            font-size: 11px;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .product-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            line-height: 1.4;
+            height: 40px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+        .stars { font-size: 12px; }
+        .sold-count {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .price-wrapper {
+            margin-top: auto;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .old-price {
+            font-size: 12px;
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .current-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .buy-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: background 0.2s;
+            text-align: center;
+        }
+
+        .buy-btn:hover {
+            background: #26af5f;
+        }
+
+        /* PAYMENT GATEWAY SECTION */
+        .payments-section {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 30px 5%;
+            text-align: center;
+        }
+        .payments-section h5 {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .payment-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        .pay-badge {
+            background: #f1f2f6;
+            padding: 6px 15px;
+            border-radius: 6px;
+            font-weight: 700;
+            color: #57606f;
+            font-size: 12px;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: #a4b0be;
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            .search-bar {
+                display: none;
+            }
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR E-COMMERCE -->
+    <nav>
+        <div class="logo">KING TAYA<span>STORE</span></div>
+        <div class="search-bar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" placeholder="Cari paket joko...">
+        </div>
+        <div class="nav-icons">
+            <div class="cart-badge">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <div class="badge">0</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO BANNER PROMO -->
+    <div class="hero">
+        <div class="hero-text">
+            <h1>JOKO FT KING TAYA</h1>
+            <p>buka sesuai mood</p>
+            <div class="slogan">LU ADA TAYA LU PUNYA KUASA 😎</div>
+        </div>
+    </div>
+
+    <!-- MAIN APP WRAPPER -->
+    <div class="main-container">
+        
+        <!-- SIDEBAR KATALOG -->
+        <div class="sidebar">
+            <h4>Kategori Game</h4>
+            <div class="filter-group">
+                <div class="filter-item active">✨ Semua Layanan</div>
+                <div class="filter-item">⚡ Joko Fast Track</div>
+                <div class="filter-item">🔥 Paket Hemat</div>
+                <div class="filter-item">🏆 Paket Sultan</div>
+            </div>
+        </div>
+
+        <!-- PRODUCTS GRID SECTION -->
+        <div class="products-container">
+            <div class="products-grid">
+                
+                <!-- Paket 1 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">
+                        500P
+                        <div class="tag-status">Terlaris</div>
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #1 (Fee 500P)</h3>
+                        <div class="rating"><span class="stars">⭐⭐⭐⭐•</span><span class="sold-count">(1.2k+ terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">1K</span><span class="current-price">500P</span></div>
+                        <a href="https://wa.me/6285954684314?text=Halo%20king%2C%20gw%20mau%20pesen%20joko%20ft%20fee%28500P%29%2C%20di%20jawab%20ya%20king%F0%9F%99%8F" target="_blank" class="buy-btn">Beli Sekarang</a>
+                    </div>
+                </div>
+
+                <!-- Paket 2 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">
+                        750P
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #2 (Fee 750P)</h3>
+                        <div class="rating"><span class="stars">⭐⭐⭐⭐⭐</span><span class="sold-count">(940 terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">1.5K</span><span class="current-price">750P</span></div>
+                        <a href="https://wa.me/6285954684314?text=Halo%20king%2C%20gw%20mau%20pesen%20joko%20ft%20fee%28750P%29%2C%20di%20jawab%20ya%20king%F0%9F%99%8F" target="_blank" class="buy-btn">Beli Sekarang</a>
+                    </div>
+                </div>
+
+                <!-- Paket 3 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">
+                        1K
+                        <div class="tag-status">Terlaris</div>
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #3 (Fee 1K)</h3>
+                        <div class="rating"><span class="stars">⭐⭐⭐⭐⭐</span><span class="sold-count">(2.1k+ terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">2K</span><span class="current-price">1K</span></div>
+                        <a href="https://wa.me/6285954684314?text=Halo%20king%2C%20gw%20mau%20pesen%20joko%20ft%20fee%281K%29%2C%20di%20jawab%20ya%20king%F0%9F%99%8F" target="_blank" class="buy-btn">Beli Sekarang</a>
+                    </div>
+                </div>
+
+                <!-- Paket 4 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">
+                        1.5K
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #4 (Fee 1.5K)</h3>
+                        <div class="rating"><span class="stars">⭐⭐⭐⭐⭐</span><span class="sold-count">(1.4k+ terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">3K</span><span class="current-price">1.5K</span></div>
+                        <a href="https://wa.me/6285954684314?text=Halo%20king%2C%20gw%20mau%20pesen%20joko%20ft%20fee%281.5K%29%2C%20di%20jawab%20ya%20king%F0%9F%99%8F" target="_blank" class="buy-btn">Beli Sekarang</a>
+                    </div>
+                </div>
+
+                <!-- Paket 5 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">
+                        2K
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #5 (Fee 2K)</h3>
+                        <div class="rating"><span class="stars">⭐⭐⭐⭐⭐</span><span class="sold-count">(820 terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">4K</span><span class="current-price">2K</span></div>
+                        <a href="https://wa.me/6285954684314?text=Halo%20king%2C%20gw%20mau%20pesen%20joko%20ft%20fee%282K%29%2C%20di%20jawab%20ya%20king%F0%9F%99%8F" target="_blank" class="buy-btn">Beli Sekarang</a>
+                    </div>
+                </div>
+
+                <!-- Paket 6 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">
+                        2.5K
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #6 (Fee 2.5K)</h3>
+                        <div class="rating"><span class="stars">⭐⭐⭐⭐⭐</span><span class="sold-count">(660 terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">5K</span><span class="current-price">2.5K</span></div>
+                        <a href="https://wa.me/6285954684314?text=Halo%20king%2C%20gw%20mau%20pesen%20joko%20ft%20fee%282.5K%29%2C%20di%20jawab%20ya%20king%F0%9F%99%8F" target="_blank" class="buy-btn">Beli Sekarang</a>
+                    </div>
+                </div>
+
+                <!-- Paket 7 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">
+                        3K
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #7 (Fee 3K)</h3>
+                        <div class="rating"><span class="stars">⭐⭐⭐⭐⭐</span><span class="sold-count">(1.1k+ terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">6K</span><span class="current-price">3K</span></div>
+                        <a href="https://wa.me/6285954684314?text=Halo%20king%2C%20gw%20mau%20pesen%20joko%20ft%20fee%283K%29%2C%20di%20jawab%20ya%20king%F0%9F%99%8F" target="_blank" class="buy-btn">Beli Sekarang</a>
+                    </div>
+                </div>
+
+                <!-- Paket 8 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">
+                        3.5K
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #8 (Fee 3.5K)</h3>
+                        <div class="rating"><span class="stars">⭐⭐⭐⭐⭐</span><span class="sold-count">(430 terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">7K</span><span class="current-price">3.5K</span></div>
+                        <a href="https://wa.me/6285954684314?text=Halo%20king%2C%20gw%20mau%20pesen%20joko%20ft%20fee%283.5K%29%2C%20di%20jawab%20ya%20king%F0%9F%99%8F" target="_blank" class="buy-btn">Beli Sekarang</a>
+                    </div>
+                </div>
+
+                <!-- Paket 9 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">
+                        4K
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #9 (Fee 4K)</h3>
+                        <div class="rating"><span class="stars">⭐⭐⭐⭐⭐</span><span class="sold-count">(510 terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">8K</span><span class="current-price">4K</span></div>
+                        <a href="https://wa.me/6285954684314?text=Halo%20king%2C%20gw%20mau%20pesen%20joko%20ft%20fee%284K%29%2C%20di%20jawab%20ya%20king%F0%9F%99%8F" target="_blank" class="buy-btn">Beli Sekarang</a>
+                    </div>
+                </div>
+
+                <!-- Paket 10 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">
+                        4.5K
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #10 (Fee 4.5K)</h3>
+                        <div class="rating"><span class="stars">⭐⭐⭐⭐⭐</span><span class="sold-count">(290 terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">9K</span><span class="current-price">4.5K</span></div>
+                        <a href="https://wa.me/6285954684314?text=Halo%20king%2C%20gw%20mau%20pesen%20joko%20ft%20fee%284.5K%29%2C%20di%20jawab%20ya%20king%F0%9F%99%8F" target="_blank" class="buy-btn">Beli Sekarang</a>
+                    </div>
+                </div>
+
+                <!-- Paket 11 -->
+                <div class="product-card">
+                    <div class="discount-badge">-50%</div>
+                    <div class="product-img-placeholder">
+                        5K
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">JASA JOKO FT</span>
+                        <h3 class="product-title">Paket JOKO FT #11 (Fee 5K)</h3>
+                        <div class="rating"><span class="stars">⭐⭐⭐⭐⭐</span><span class="sold-count">(1.2k+ terjual)</span></div>
+                        <div class="price-wrapper"><span class="old-price">10K</span><span class="current-price">5K</span></div>
+                        <a href="https://wa.me/6285954684314?text=Halo%20king%2C%20gw%20mau%20pesen%20joko%20ft%20fee%285K%29%2C%20di%20jawab%20ya%20king%F0%9F%99%8F" target="_blank" class="buy-btn">Beli Sekarang</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PAYMENT GATEWAY LOGO MOCKUP -->
+    <div class="payments-section">
+        <h5>Metode Pembayaran Didukung</h5>
+        <div class="payment-logos">
+            <div class="pay-badge">QRIS</div>
+            <div class="pay-badge">DANA</div>
+            <div class="pay-badge">OVO</div>
+            <div class="pay-badge">GOPAY</div>
+            <div class="pay-badge">SPAY</div>
+            <div class="pay-badge">BANK TRANSFER</div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        &copy; 2026 KING TAYA STORE. All Rights Reserved. Desain E-Commerce Profesional Otomatis.
+    </footer>
+
+</body>
+</html>
