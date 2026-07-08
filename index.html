@@ -17,6 +17,11 @@
         .cart-nav-btn { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: 0.2s; }
         .cart-nav-btn:hover { background: var(--primary); }
 
+        /* HEADER BANNER BARU */
+        .header-banner { text-align: center; padding: 35px 20px; background: linear-gradient(135deg, #2f3542, #1e222b); color: white; margin-bottom: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+        .header-banner h1 { font-weight: 800; font-size: 32px; letter-spacing: 1px; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header-banner p { font-weight: 600; color: var(--primary); font-size: 16px; margin-top: 8px; letter-spacing: 0.5px; }
+
         /* GRID PRODUK */
         .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
         .container h2 { margin-bottom: 20px; font-weight: 800; color: var(--secondary); }
@@ -26,6 +31,9 @@
         .product-card h3 { font-size: 16px; color: var(--secondary); margin-bottom: 5px; }
         .product-price { font-weight: 800; color: var(--primary); margin-bottom: 12px; }
         
+        /* CARD BUTTONS GROUP */
+        .card-buttons { display: flex; flex-direction: column; gap: 6px; }
+
         /* MODAL */
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); display: none; align-items:center; justify-content:center; z-index: 1000; padding: 15px; }
         .modal-overlay.active { display: flex; }
@@ -54,7 +62,9 @@
         .btn-action { background: var(--primary); color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: 600; font-size: 15px; margin-top: 8px; cursor: pointer; transition: 0.2s; }
         .btn-action:hover { opacity: 0.9; }
         .btn-add { background: #f1f2f6; color: var(--secondary); font-size: 13px; font-weight: 600; border-radius: 6px; padding: 8px; border: none; cursor: pointer; width: 100%; transition: 0.2s; }
-        .btn-add:hover { background: var(--primary); color: white; }
+        .btn-add:hover { background: #e4e4e4; }
+        .btn-buy { background: var(--primary); color: white; font-size: 13px; font-weight: 600; border-radius: 6px; padding: 8px; border: none; cursor: pointer; width: 100%; transition: 0.2s; }
+        .btn-buy:hover { opacity: 0.9; }
         
         /* TOAST NOTIFICATION */
         .toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 12px 25px; border-radius: 30px; font-weight: 600; box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2000; display: flex; align-items: center; gap: 10px; }
@@ -69,6 +79,12 @@
     </nav>
 
     <div class="container">
+        <!-- HEADER TEXT SESUAI REQUEST -->
+        <div class="header-banner">
+            <h1>JOKO FT KING TAYA</h1>
+            <p>Lo punya taya, lo punya kuasa😎</p>
+        </div>
+
         <h2>List Paket JOKO FT</h2>
         <div class="products-grid" id="productGrid"></div>
     </div>
@@ -153,7 +169,7 @@
             return val >= 1000 ? (val/1000)+'K' : val+'P';
         }
 
-        // Render Semua Produk Ke Layar
+        // Render Semua Produk Ke Layar (Dua Tombol Sesuai Request)
         document.getElementById('productGrid').innerHTML = produkList.map(item => `
             <div class="product-card">
                 <div>
@@ -162,7 +178,10 @@
                 </div>
                 <div>
                     <div class="product-price">${formatPrice(item.price)}</div>
-                    <button class="btn-add" onclick="addToCart(${item.id})">Tambah Keranjang</button>
+                    <div class="card-buttons">
+                        <button class="btn-add" onclick="addToCart(${item.id})">Tambah Keranjang</button>
+                        <button class="btn-buy" onclick="buyNow(${item.id})">Beli Sekarang</button>
+                    </div>
                 </div>
             </div>
         `).join('');
@@ -187,6 +206,23 @@
             
             saveAndUpdateCart();
             showToast(`${item.name} Masuk Keranjang, King!`);
+        }
+
+        // FUNGSI UTK TOMBOL BELI SEKARANG (Langsung masuk keranjang & buka Modal Opsi)
+        function buyNow(id) {
+            let item = produkList.find(p => p.id === id);
+            let existing = cart.find(c => c.id === id);
+            
+            if(!existing) {
+                cart.push({...item, qty: 1});
+            }
+            
+            saveAndUpdateCart();
+            
+            // Otomatis buka popup keranjang biar user tinggal milih opsi main & mode
+            if(!document.getElementById('cartModal').classList.contains('active')) {
+                toggleCart();
+            }
         }
 
         function updateQuantity(id, delta) {
