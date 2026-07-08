@@ -24,7 +24,7 @@
 
         /* CONTAINER */
         .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; position: relative; }
-        .container h2 { margin-bottom: 20px; font-weight: 800; color: var(--secondary); }
+        .container h2 { margin-top: 25px; margin-bottom: 15px; font-weight: 800; color: var(--secondary); }
 
         /* CAROUSEL SYSTEM */
         .carousel-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
@@ -32,9 +32,9 @@
         .products-carousel::-webkit-scrollbar { display: none; } /* Sembunyiin scrollbar bawaan */
         
         /* CARD PRODUK FIXED SIZE UNTUK CAROUSEL */
-        .product-card { background: #fff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eef2f5; display: flex; flex-direction: column; justify-content: space-between; flex: 0 0 190px; /* Lebar tiap kartu dikunci biar rapi pas digeser */ }
+        .product-card { background: #fff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eef2f5; display: flex; flex-direction: column; justify-content: space-between; flex: 0 0 190px; }
         .product-img { background: var(--secondary); color: #fff; height: 90px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 22px; border-radius: 8px; margin-bottom: 12px; }
-        .product-card h3 { font-size: 16px; color: var(--secondary); margin-bottom: 5px; }
+        .product-card h3 { font-size: 15px; color: var(--secondary); margin-bottom: 5px; height: 45px; display: flex; align-items: center; justify-content: center; }
         .product-price { font-weight: 800; color: var(--primary); margin-bottom: 12px; }
         
         /* TOMBOL NAVIGASI CAROUSEL (KANAN-KIRI) */
@@ -103,13 +103,20 @@
             <p>Lo punya taya, lo punya kuasa😎</p>
         </div>
 
+        <!-- CAROUSEL 1: JOKO FT -->
         <h2>List Paket JOKO FT</h2>
-        
-        <!-- STRUKTUR CAROUSEL BARU -->
         <div class="carousel-wrapper">
-            <button class="carousel-arrow arrow-left" onclick="slideCarousel(-1)">❮</button>
+            <button class="carousel-arrow arrow-left" onclick="slideCarousel('productGrid', -1)">❮</button>
             <div class="products-carousel" id="productGrid"></div>
-            <button class="carousel-arrow arrow-right" onclick="slideCarousel(1)">❯</button>
+            <button class="carousel-arrow arrow-right" onclick="slideCarousel('productGrid', 1)">❯</button>
+        </div>
+
+        <!-- CAROUSEL 2: PENGAMAN BR -->
+        <h2>List Paket Pengaman BR</h2>
+        <div class="carousel-wrapper">
+            <button class="carousel-arrow arrow-left" onclick="slideCarousel('brProductGrid', -1)">❮</button>
+            <div class="products-carousel" id="brProductGrid"></div>
+            <button class="carousel-arrow arrow-right" onclick="slideCarousel('brProductGrid', 1)">❯</button>
         </div>
     </div>
 
@@ -159,6 +166,27 @@
                 </div>
             </div>
 
+            <!-- UI PILIHAN JUMLAH MATCH BR DENGAN EVENT AUTO UPDATE -->
+            <div class="section-title">Mau berapa match cuy, ada:</div>
+            <div class="opt-group">
+                <div class="radio-btn">
+                    <input type="radio" name="br_match" value="1" checked onchange="saveAndUpdateCart()">
+                    <div class="radio-label">1</div>
+                </div>
+                <div class="radio-btn">
+                    <input type="radio" name="br_match" value="2" onchange="saveAndUpdateCart()">
+                    <div class="radio-label">2</div>
+                </div>
+                <div class="radio-btn">
+                    <input type="radio" name="br_match" value="3" onchange="saveAndUpdateCart()">
+                    <div class="radio-label">3</div>
+                </div>
+                <div class="radio-btn">
+                    <input type="radio" name="br_match" value="4" onchange="saveAndUpdateCart()">
+                    <div class="radio-label">4</div>
+                </div>
+            </div>
+
             <button class="btn-action" onclick="checkout()">Checkout via WhatsApp</button>
             <button class="btn-action" style="background:#747d8c; margin-top:5px;" onclick="toggleCart()">Tutup Halaman</button>
         </div>
@@ -170,7 +198,7 @@
     </div>
 
     <script>
-        // LIST HARGA LENGKAP #1 SAMPAI #11
+        // LIST HARGA JOKO FT LENGKAP #1 SAMPAI #11
         const produkList = [
             { id: 1, name: "Paket JOKO FT #1", price: 500 },
             { id: 2, name: "Paket JOKO FT #2", price: 750 },
@@ -185,6 +213,12 @@
             { id: 11, name: "Paket JOKO FT #11", price: 5000 }
         ];
 
+        // LIST HARGA PENGAMAN BR BARU (Rank: 1K, Biasa: 500P)
+        const brProdukList = [
+            { id: 101, name: "Paket Pengaman BR Rank", price: 1000 },
+            { id: 102, name: "Paket Pengaman BR Biasa", price: 500 }
+        ];
+
         // Load data awal dari LocalStorage kalau ada
         let cart = JSON.parse(localStorage.getItem('kingTayaCart')) || [];
 
@@ -193,7 +227,7 @@
             return val >= 1000 ? (val/1000)+'K' : val+'P';
         }
 
-        // Render Semua Produk Ke Dalam Carousel Container
+        // Render Semua Produk JOKO FT
         document.getElementById('productGrid').innerHTML = produkList.map(item => `
             <div class="product-card">
                 <div>
@@ -210,14 +244,30 @@
             </div>
         `).join('');
 
+        // Render Semua Produk Pengaman BR (Update Harga Bar Awal)
+        document.getElementById('brProductGrid').innerHTML = brProdukList.map(item => `
+            <div class="product-card">
+                <div>
+                    <div class="product-img" style="background: #1e222b; border: 1px solid var(--primary); text-shadow: 0 0 5px var(--primary);">${formatPrice(item.price)}</div>
+                    <h3>${item.name}</h3>
+                </div>
+                <div>
+                    <div class="product-price">${formatPrice(item.price)}</div>
+                    <div class="card-buttons">
+                        <button class="btn-add" onclick="addToCart(${item.id})">Tambah Keranjang</button>
+                        <button class="btn-buy" onclick="buyNow(${item.id})">Beli Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
         // FUNGSI NAVIGASI TOMBOL CAROUSEL KANAN-KIRI
-        function slideCarousel(direction) {
-            const container = document.getElementById('productGrid');
-            const scrollAmount = 205; // Lebar card (190px) + Gap (15px)
+        function slideCarousel(gridId, direction) {
+            const container = document.getElementById(gridId);
+            const scrollAmount = 205; 
             container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
         }
 
-        // Munculin Notif Toast di Bawah
         function showToast(message) {
             const toast = document.getElementById('toastNotif');
             document.getElementById('toastMessage').innerText = message;
@@ -225,8 +275,12 @@
             setTimeout(() => { toast.classList.remove('show'); }, 2500);
         }
 
+        function getProductById(id) {
+            return produkList.find(p => p.id === id) || brProdukList.find(p => p.id === id);
+        }
+
         function addToCart(id) {
-            let item = produkList.find(p => p.id === id);
+            let item = getProductById(id);
             let existing = cart.find(c => c.id === id);
             
             if(existing) {
@@ -240,7 +294,7 @@
         }
 
         function buyNow(id) {
-            let item = produkList.find(p => p.id === id);
+            let item = getProductById(id);
             let existing = cart.find(c => c.id === id);
             
             if(!existing) {
@@ -265,6 +319,7 @@
             saveAndUpdateCart();
         }
 
+        // UPDATE HARGA SECARA REAL-TIME BERDASARKAN JUMLAH MATCH
         function saveAndUpdateCart() {
             localStorage.setItem('kingTayaCart', JSON.stringify(cart));
             
@@ -272,16 +327,25 @@
             const totalEl = document.getElementById('cartTotal');
             let total = 0;
             
+            // Ambil jumlah match aktif dari UI radio button
+            let brMatch = parseInt(document.querySelector('input[name="br_match"]:checked')?.value || 1);
+            
             if(cart.length === 0) {
                 list.innerHTML = `<p style="color:#747d8c; text-align:center; padding: 20px 0;">Keranjang lu kosong masee... 🗿</p>`;
             } else {
                 list.innerHTML = cart.map(item => {
-                    total += (item.price * item.qty);
+                    // Cek jika item adalah produk BR (id 101 / 102), kalikan harganya dengan jumlah match
+                    let effectivePrice = item.price;
+                    if (item.id === 101 || item.id === 102) {
+                        effectivePrice = item.price * brMatch;
+                    }
+                    
+                    total += (effectivePrice * item.qty);
                     return `
                         <div class="cart-item">
                             <div class="cart-item-info">
                                 <strong>${item.name}</strong>
-                                <p>${formatPrice(item.price)} x ${item.qty}</p>
+                                <p>${formatPrice(effectivePrice)} x ${item.qty}</p>
                             </div>
                             <div class="qty-control">
                                 <button onclick="updateQuantity(${item.id}, -1)">-</button>
@@ -309,17 +373,23 @@
 
             let mainFt = document.querySelector('input[name="ft_type"]:checked').value;
             let modeFt = document.querySelector('input[name="ft_mode"]:checked').value;
+            let brMatch = parseInt(document.querySelector('input[name="br_match"]:checked').value);
             
             let totalSmua = 0;
             let listPesanan = cart.map(i => {
-                totalSmua += (i.price * i.qty);
-                return `- ${i.name} (x${i.qty}) = ${formatPrice(i.price * i.qty)}`;
+                let effectivePrice = i.price;
+                if (i.id === 101 || i.id === 102) {
+                    effectivePrice = i.price * brMatch;
+                }
+                totalSmua += (effectivePrice * i.qty);
+                return `- ${i.name} (x${i.qty}) = ${formatPrice(effectivePrice * i.qty)}`;
             }).join('%0A');
 
-            let msg = `WOI KING! Gw mau order jasa JOKO FT nih 😎%0A%0A`;
+            let msg = `WOI KING! Gw mau order nih 😎%0A%0A`;
             msg += `*Detail Pesanan:*%0A${listPesanan}%0A%0A`;
             msg += `*Main FT:* ${mainFt}%0A`;
             msg += `*Mode FT:* ${modeFt}%0A`;
+            msg += `*Request Match BR:* ${brMatch} Match (Harga x${brMatch})%0A`;
             msg += `*Total Harga:* ${formatPrice(totalSmua)}%0A%0A`;
             msg += `Ditunggu balesannya King, gass proses! 🔥`;
 
