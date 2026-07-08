@@ -17,20 +17,38 @@
         .cart-nav-btn { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: 0.2s; }
         .cart-nav-btn:hover { background: var(--primary); }
 
-        /* HEADER BANNER BARU */
+        /* HEADER BANNER */
         .header-banner { text-align: center; padding: 35px 20px; background: linear-gradient(135deg, #2f3542, #1e222b); color: white; margin-bottom: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
         .header-banner h1 { font-weight: 800; font-size: 32px; letter-spacing: 1px; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
         .header-banner p { font-weight: 600; color: var(--primary); font-size: 16px; margin-top: 8px; letter-spacing: 0.5px; }
 
-        /* GRID PRODUK */
-        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        /* CONTAINER */
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; position: relative; }
         .container h2 { margin-bottom: 20px; font-weight: 800; color: var(--secondary); }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
-        .product-card { background: #fff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eef2f5; display: flex; flex-direction: column; justify-content: space-between; }
+
+        /* CAROUSEL SYSTEM */
+        .carousel-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
+        .products-carousel { display: flex; gap: 15px; overflow-x: auto; scroll-behavior: smooth; padding: 10px 5px; width: 100%; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        .products-carousel::-webkit-scrollbar { display: none; } /* Sembunyiin scrollbar bawaan */
+        
+        /* CARD PRODUK FIXED SIZE UNTUK CAROUSEL */
+        .product-card { background: #fff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eef2f5; display: flex; flex-direction: column; justify-content: space-between; flex: 0 0 190px; /* Lebar tiap kartu dikunci biar rapi pas digeser */ }
         .product-img { background: var(--secondary); color: #fff; height: 90px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 22px; border-radius: 8px; margin-bottom: 12px; }
         .product-card h3 { font-size: 16px; color: var(--secondary); margin-bottom: 5px; }
         .product-price { font-weight: 800; color: var(--primary); margin-bottom: 12px; }
         
+        /* TOMBOL NAVIGASI CAROUSEL (KANAN-KIRI) */
+        .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: var(--secondary); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 18px; font-weight: bold; cursor: pointer; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .carousel-arrow:hover { background: var(--primary); }
+        .arrow-left { left: -15px; }
+        .arrow-right { right: -15px; }
+        
+        /* Menyembunyikan tombol panah di layar HP biar fokus swipe pake jari */
+        @media (max-width: 768px) {
+            .carousel-arrow { display: none; }
+            .container { padding: 0 15px; }
+        }
+
         /* CARD BUTTONS GROUP */
         .card-buttons { display: flex; flex-direction: column; gap: 6px; }
 
@@ -79,14 +97,20 @@
     </nav>
 
     <div class="container">
-        <!-- HEADER TEXT SESUAI REQUEST -->
+        <!-- HEADER TEXT -->
         <div class="header-banner">
             <h1>JOKO FT KING TAYA</h1>
             <p>Lo punya taya, lo punya kuasa😎</p>
         </div>
 
         <h2>List Paket JOKO FT</h2>
-        <div class="products-grid" id="productGrid"></div>
+        
+        <!-- STRUKTUR CAROUSEL BARU -->
+        <div class="carousel-wrapper">
+            <button class="carousel-arrow arrow-left" onclick="slideCarousel(-1)">❮</button>
+            <div class="products-carousel" id="productGrid"></div>
+            <button class="carousel-arrow arrow-right" onclick="slideCarousel(1)">❯</button>
+        </div>
     </div>
 
     <!-- MODAL KERANJANG -->
@@ -169,7 +193,7 @@
             return val >= 1000 ? (val/1000)+'K' : val+'P';
         }
 
-        // Render Semua Produk Ke Layar (Dua Tombol Sesuai Request)
+        // Render Semua Produk Ke Dalam Carousel Container
         document.getElementById('productGrid').innerHTML = produkList.map(item => `
             <div class="product-card">
                 <div>
@@ -185,6 +209,13 @@
                 </div>
             </div>
         `).join('');
+
+        // FUNGSI NAVIGASI TOMBOL CAROUSEL KANAN-KIRI
+        function slideCarousel(direction) {
+            const container = document.getElementById('productGrid');
+            const scrollAmount = 205; // Lebar card (190px) + Gap (15px)
+            container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+        }
 
         // Munculin Notif Toast di Bawah
         function showToast(message) {
@@ -208,7 +239,6 @@
             showToast(`${item.name} Masuk Keranjang, King!`);
         }
 
-        // FUNGSI UTK TOMBOL BELI SEKARANG (Langsung masuk keranjang & buka Modal Opsi)
         function buyNow(id) {
             let item = produkList.find(p => p.id === id);
             let existing = cart.find(c => c.id === id);
@@ -219,7 +249,6 @@
             
             saveAndUpdateCart();
             
-            // Otomatis buka popup keranjang biar user tinggal milih opsi main & mode
             if(!document.getElementById('cartModal').classList.contains('active')) {
                 toggleCart();
             }
@@ -237,7 +266,6 @@
         }
 
         function saveAndUpdateCart() {
-            // Save ke LocalStorage biar ga ilang pas di refresh
             localStorage.setItem('kingTayaCart', JSON.stringify(cart));
             
             const list = document.getElementById('cartList');
@@ -279,7 +307,6 @@
                 return;
             }
 
-            // Ambil data pilihan dari UI Radio Button
             let mainFt = document.querySelector('input[name="ft_type"]:checked').value;
             let modeFt = document.querySelector('input[name="ft_mode"]:checked').value;
             
@@ -299,7 +326,6 @@
             window.open(`https://wa.me/6285954684314?text=${msg}`, '_blank');
         }
 
-        // Jalankan sinkronisasi keranjang pas halaman pertama kali dibuka
         document.addEventListener("DOMContentLoaded", function() {
             saveAndUpdateCart();
         });
