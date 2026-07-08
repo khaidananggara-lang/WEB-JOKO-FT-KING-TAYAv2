@@ -8,117 +8,265 @@
     <style>
         :root { --primary: #ff4757; --secondary: #2f3542; --accent: #2ed573; --bg: #f4f6f9; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg); }
+        body { background-color: var(--bg); padding-bottom: 60px; }
         
         /* NAVBAR */
-        nav { background: var(--secondary); color: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; }
+        nav { background: var(--secondary); color: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top:0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .logo { font-weight: 800; font-size: 20px; }
         .logo span { color: var(--primary); }
+        .cart-nav-btn { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .cart-nav-btn:hover { background: var(--primary); }
 
-        /* GRID */
+        /* GRID PRODUK */
         .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .container h2 { margin-bottom: 20px; font-weight: 800; color: var(--secondary); }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        .product-card { background: #fff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eef2f5; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-img { background: var(--secondary); color: #fff; height: 90px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 22px; border-radius: 8px; margin-bottom: 12px; }
+        .product-card h3 { font-size: 16px; color: var(--secondary); margin-bottom: 5px; }
+        .product-price { font-weight: 800; color: var(--primary); margin-bottom: 12px; }
         
-        .product-card { background: #fff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
-        .product-img { background: #000; color: #fff; height: 100px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 8px; margin-bottom: 10px; }
-        .btn-group { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
-        button { cursor: pointer; border: none; padding: 8px; border-radius: 5px; font-weight: 600; }
-        .cart-btn { background: #eee; color: #333; }
-        .instant-btn { background: var(--primary); color: #fff; }
-
-        /* MODAL CUSTOM UI */
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); display: none; align-items:center; justify-content:center; z-index: 1000; }
+        /* MODAL */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); display: none; align-items:center; justify-content:center; z-index: 1000; padding: 15px; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: #fff; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; }
-        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .opt-btn { background: #f1f1f1; padding: 15px; border-radius: 10px; font-weight: 800; font-size: 18px; }
-        .back-btn { background: #747d8c; color: #fff; width: 100%; padding: 10px; margin-top: 10px; }
+        .modal-content { background: #fff; padding: 25px; border-radius: 15px; width: 100%; max-width: 450px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .modal-content h3 { font-weight: 800; margin-bottom: 15px; border-bottom: 2px solid #f1f1f1; padding-bottom: 10px; }
+        
+        /* CART ITEM */
+        .cart-list { max-height: 200px; overflow-y: auto; margin-bottom: 15px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .cart-item-info { text-align: left; }
+        .cart-item-info p { font-size: 12px; color: #747d8c; }
+        .qty-control { display: flex; align-items: center; gap: 8px; }
+        .qty-control button { width: 28px; height: 28px; border: none; background: #f1f2f6; cursor: pointer; border-radius: 5px; font-weight: 800; font-size: 16px; transition: 0.2s; }
+        .qty-control button:hover { background: #ced6e0; }
+        
+        /* OPTIONS SELECTION UI */
+        .section-title { font-size: 14px; font-weight: 800; margin: 15px 0 8px 0; text-align: left; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .opt-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
+        .opt-group-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 20px; }
+        .radio-btn { position: relative; }
+        .radio-btn input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; z-index: 2; }
+        .radio-label { display: block; background: #f1f2f6; text-align: center; padding: 10px; border-radius: 8px; font-weight: 600; font-size: 14px; transition: 0.2s; border: 2px solid transparent; }
+        .radio-btn input:checked + .radio-label { background: #fff5f6; border-color: var(--primary); color: var(--primary); font-weight: 800; }
+        
+        /* BUTTONS */
+        .btn-action { background: var(--primary); color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: 600; font-size: 15px; margin-top: 8px; cursor: pointer; transition: 0.2s; }
+        .btn-action:hover { opacity: 0.9; }
+        .btn-add { background: #f1f2f6; color: var(--secondary); font-size: 13px; font-weight: 600; border-radius: 6px; padding: 8px; border: none; cursor: pointer; width: 100%; transition: 0.2s; }
+        .btn-add:hover { background: var(--primary); color: white; }
+        
+        /* TOAST NOTIFICATION */
+        .toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 12px 25px; border-radius: 30px; font-weight: 600; box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2000; display: flex; align-items: center; gap: 10px; }
+        .toast.show { bottom: 20px; }
     </style>
 </head>
 <body>
 
     <nav>
         <div class="logo">KING TAYA<span>STORE</span></div>
-        <div onclick="toggleCart()" style="cursor:pointer">🛒 Keranjang (<span id="cart-count">0</span>)</div>
+        <div class="cart-nav-btn" onclick="toggleCart()">🛒 Keranjang (<span id="cart-count">0</span>)</div>
     </nav>
 
     <div class="container">
         <h2>List Paket JOKO FT</h2>
-        <div class="products-grid" id="productGrid">
-            <!-- Produk akan di-generate otomatis oleh JS -->
+        <div class="products-grid" id="productGrid"></div>
+    </div>
+
+    <!-- MODAL KERANJANG -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal-content">
+            <h3>Keranjang Belanja Lu</h3>
+            
+            <div class="cart-list" id="cartList"></div>
+            
+            <div style="display: flex; justify-content: space-between; font-weight: 800; margin: 15px 0; font-size: 18px; border-top: 2px dashed #f1f1f1; padding-top: 10px;">
+                <span>Total Harga:</span>
+                <span id="cartTotal" style="color: var(--primary);">0</span>
+            </div>
+
+            <!-- UI PILIHAN LU MAIN FT APA -->
+            <div class="section-title">Lu Main FT Apa, King?</div>
+            <div class="opt-group">
+                <div class="radio-btn">
+                    <input type="radio" name="ft_type" value="11" checked>
+                    <div class="radio-label">11</div>
+                </div>
+                <div class="radio-btn">
+                    <input type="radio" name="ft_type" value="22">
+                    <div class="radio-label">22</div>
+                </div>
+                <div class="radio-btn">
+                    <input type="radio" name="ft_type" value="33">
+                    <div class="radio-label">33</div>
+                </div>
+                <div class="radio-btn">
+                    <input type="radio" name="ft_type" value="44">
+                    <div class="radio-label">44</div>
+                </div>
+            </div>
+
+            <!-- UI PILIHAN MODE -->
+            <div class="section-title">Pilih Mode FT</div>
+            <div class="opt-group-2">
+                <div class="radio-btn">
+                    <input type="radio" name="ft_mode" value="PPNG" checked>
+                    <div class="radio-label">PPNG</div>
+                </div>
+                <div class="radio-btn">
+                    <input type="radio" name="ft_mode" value="TKEN">
+                    <div class="radio-label">TKEN</div>
+                </div>
+            </div>
+
+            <button class="btn-action" onclick="checkout()">Checkout via WhatsApp</button>
+            <button class="btn-action" style="background:#747d8c; margin-top:5px;" onclick="toggleCart()">Tutup Halaman</button>
         </div>
     </div>
 
-    <!-- MODAL PILIH OPSI (11/22/33/44) -->
-    <div class="modal-overlay" id="optionModal">
-        <div class="modal-content">
-            <h3>Pilih Opsi Main Lu!</h3>
-            <div class="opt-grid">
-                <button class="opt-btn" onclick="executeOrder('11')">11</button>
-                <button class="opt-btn" onclick="executeOrder('22')">22</button>
-                <button class="opt-btn" onclick="executeOrder('33')">33</button>
-                <button class="opt-btn" onclick="executeOrder('44')">44</button>
-            </div>
-            <button class="back-btn" onclick="closeModal()">← KEMBALI</button>
-        </div>
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toastNotif">
+        <span>🛒</span> <span id="toastMessage">Barang berhasil masuk keranjang!</span>
     </div>
 
     <script>
-        // --- DATA PRODUK (Tinggal tambah di sini!) ---
+        // LIST HARGA LENGKAP #1 SAMPAI #11
         const produkList = [
-            { id: 1, name: "Paket #1", price: 500 },
-            { id: 2, name: "Paket #2", price: 750 },
-            { id: 3, name: "Paket #3", price: 1000 },
-            { id: 4, name: "Paket #4", price: 1500 },
-            { id: 5, name: "Paket #5", price: 2000 },
-            { id: 6, name: "Paket #6", price: 2500 },
-            { id: 7, name: "Paket #7", price: 3000 },
-            { id: 8, name: "Paket #8", price: 3500 },
-            { id: 9, name: "Paket #9", price: 4000 },
-            { id: 10, name: "Paket #10", price: 4500 },
-            { id: 11, name: "Paket #11", price: 5000 }
+            { id: 1, name: "Paket JOKO FT #1", price: 500 },
+            { id: 2, name: "Paket JOKO FT #2", price: 750 },
+            { id: 3, name: "Paket JOKO FT #3", price: 1000 },
+            { id: 4, name: "Paket JOKO FT #4", price: 1500 },
+            { id: 5, name: "Paket JOKO FT #5", price: 2000 },
+            { id: 6, name: "Paket JOKO FT #6", price: 2500 },
+            { id: 7, name: "Paket JOKO FT #7", price: 3000 },
+            { id: 8, name: "Paket JOKO FT #8", price: 3500 },
+            { id: 9, name: "Paket JOKO FT #9", price: 4000 },
+            { id: 10, name: "Paket JOKO FT #10", price: 4500 },
+            { id: 11, name: "Paket JOKO FT #11", price: 5000 }
         ];
 
-        let cart = [];
-        let pendingItem = null; // Menyimpan data sementara untuk modal
+        // Load data awal dari LocalStorage kalau ada
+        let cart = JSON.parse(localStorage.getItem('kingTayaCart')) || [];
 
-        // Render Produk
-        const grid = document.getElementById('productGrid');
-        grid.innerHTML = produkList.map(item => `
+        // Fungsi Format Harga K/P
+        function formatPrice(val) {
+            return val >= 1000 ? (val/1000)+'K' : val+'P';
+        }
+
+        // Render Semua Produk Ke Layar
+        document.getElementById('productGrid').innerHTML = produkList.map(item => `
             <div class="product-card">
-                <div class="product-img">${item.price >= 1000 ? (item.price/1000)+'K' : item.price+'P'}</div>
-                <h3>${item.name}</h3>
-                <div class="btn-group">
-                    <button class="cart-btn" onclick="addToCart(${item.id})">Tambah</button>
-                    <button class="instant-btn" onclick="openModal('${item.name}', ${item.price})">Beli</button>
+                <div>
+                    <div class="product-img">${formatPrice(item.price)}</div>
+                    <h3>${item.name}</h3>
+                </div>
+                <div>
+                    <div class="product-price">${formatPrice(item.price)}</div>
+                    <button class="btn-add" onclick="addToCart(${item.id})">Tambah Keranjang</button>
                 </div>
             </div>
         `).join('');
 
-        function openModal(name, price) {
-            pendingItem = { name, price };
-            document.getElementById('optionModal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('optionModal').classList.remove('active');
-        }
-
-        function executeOrder(opsi) {
-            let msg = `WOI KING, gw mau order ${pendingItem.name} (${pendingItem.price}), Main nya ${opsi}, dibales ya KING`;
-            window.open(`https://wa.me/6285954684314?text=${encodeURIComponent(msg)}`, '_blank');
-            closeModal();
+        // Munculin Notif Toast di Bawah
+        function showToast(message) {
+            const toast = document.getElementById('toastNotif');
+            document.getElementById('toastMessage').innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 2500);
         }
 
         function addToCart(id) {
-            cart.push(id);
-            document.getElementById('cart-count').innerText = cart.length;
-            alert("Masuk keranjang!");
+            let item = produkList.find(p => p.id === id);
+            let existing = cart.find(c => c.id === id);
+            
+            if(existing) {
+                existing.qty++;
+            } else {
+                cart.push({...item, qty: 1});
+            }
+            
+            saveAndUpdateCart();
+            showToast(`${item.name} Masuk Keranjang, King!`);
         }
 
-        function toggleCart() {
-            alert("Keranjang total: " + cart.length + " item.");
+        function updateQuantity(id, delta) {
+            let item = cart.find(c => c.id === id);
+            if(item) {
+                item.qty += delta;
+                if(item.qty <= 0) {
+                    cart = cart.filter(c => c.id !== id);
+                }
+            }
+            saveAndUpdateCart();
         }
+
+        function saveAndUpdateCart() {
+            // Save ke LocalStorage biar ga ilang pas di refresh
+            localStorage.setItem('kingTayaCart', JSON.stringify(cart));
+            
+            const list = document.getElementById('cartList');
+            const totalEl = document.getElementById('cartTotal');
+            let total = 0;
+            
+            if(cart.length === 0) {
+                list.innerHTML = `<p style="color:#747d8c; text-align:center; padding: 20px 0;">Keranjang lu kosong masee... 🗿</p>`;
+            } else {
+                list.innerHTML = cart.map(item => {
+                    total += (item.price * item.qty);
+                    return `
+                        <div class="cart-item">
+                            <div class="cart-item-info">
+                                <strong>${item.name}</strong>
+                                <p>${formatPrice(item.price)} x ${item.qty}</p>
+                            </div>
+                            <div class="qty-control">
+                                <button onclick="updateQuantity(${item.id}, -1)">-</button>
+                                <span>${item.qty}</span>
+                                <button onclick="updateQuantity(${item.id}, 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            document.getElementById('cart-count').innerText = cart.reduce((a, b) => a + b.qty, 0);
+            totalEl.innerText = formatPrice(total);
+        }
+
+        function toggleCart() { 
+            document.getElementById('cartModal').classList.toggle('active'); 
+        }
+
+        function checkout() {
+            if(cart.length === 0) {
+                showToast("Isi dulu keranjangnya, King! Kagak bisa checkout.");
+                return;
+            }
+
+            // Ambil data pilihan dari UI Radio Button
+            let mainFt = document.querySelector('input[name="ft_type"]:checked').value;
+            let modeFt = document.querySelector('input[name="ft_mode"]:checked').value;
+            
+            let totalSmua = 0;
+            let listPesanan = cart.map(i => {
+                totalSmua += (i.price * i.qty);
+                return `- ${i.name} (x${i.qty}) = ${formatPrice(i.price * i.qty)}`;
+            }).join('%0A');
+
+            let msg = `WOI KING! Gw mau order jasa JOKO FT nih 😎%0A%0A`;
+            msg += `*Detail Pesanan:*%0A${listPesanan}%0A%0A`;
+            msg += `*Main FT:* ${mainFt}%0A`;
+            msg += `*Mode FT:* ${modeFt}%0A`;
+            msg += `*Total Harga:* ${formatPrice(totalSmua)}%0A%0A`;
+            msg += `Ditunggu balesannya King, gass proses! 🔥`;
+
+            window.open(`https://wa.me/6285954684314?text=${msg}`, '_blank');
+        }
+
+        // Jalankan sinkronisasi keranjang pas halaman pertama kali dibuka
+        document.addEventListener("DOMContentLoaded", function() {
+            saveAndUpdateCart();
+        });
     </script>
 </body>
 </html>
